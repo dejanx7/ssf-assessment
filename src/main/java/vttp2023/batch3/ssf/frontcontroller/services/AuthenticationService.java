@@ -1,5 +1,7 @@
 package vttp2023.batch3.ssf.frontcontroller.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 
@@ -20,29 +22,41 @@ public class AuthenticationService {
 	// TODO: Task 2
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write the authentication method in here
-	public void authenticate(String username, String password) throws Exception {
+	public String authenticate(String username, String password) throws Exception {
 
 		User user = new User(username, password);
-		JsonObject userJson = user.toJson();
+		// JsonObject userJson = user.toJson();
+
 		RestTemplate template = new RestTemplate();
 
 		String apiUrl = "https://authservice-production-e8b2.up.railway.app/api/authenticate";
 
-		ResponseEntity<String> response = template.postForEntity(apiUrl, userJson, String.class);
+		ResponseEntity<String> response = template.postForEntity(apiUrl, user, String.class);
 
-		JsonReader jsonReader = Json.createReader(new StringReader(response.getBody()));
-		JsonObject responseJsonObject = jsonReader.readObject();
+		// JsonReader jsonReader = Json.createReader(new StringReader(response.getBody()));
+		// JsonObject responseJsonObject = jsonReader.readObject();
+
+
+		// String responseString = responseJsonObject.getString("message");
+		// System.out.println(responseString);
+
+		InputStream is = new ByteArrayInputStream(response.getBody().getBytes());
+		JsonReader jr = Json.createReader(is);
+		JsonObject responseJsonObject = jr.readObject();
 
 		String responseString = responseJsonObject.getString("message");
 		System.out.println(responseString);
+		
+
 
 		if (responseString.contains("Authenticated")) {
 
-			user.setAuthenticated(true);
+			return "view1";
 
-		} else {
+		} 
+		else {
 
-			user.setAuthenticated(false);
+			return "view0.1";
 
 		}
 

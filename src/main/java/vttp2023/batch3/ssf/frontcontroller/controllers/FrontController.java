@@ -32,6 +32,9 @@ public class FrontController {
 	@PostMapping(path = "/login", consumes = "application/x-www-form-urlencoded", produces = "text/html")
 	public String loginUser(@Valid User user, BindingResult br, Model m) throws Exception {
 
+		m.addAttribute("user", user);
+		int i = 0;
+
 		if (br.hasErrors()) {
 
 			return "view0";
@@ -40,17 +43,20 @@ public class FrontController {
 
 			String username = user.getUsername();
 			String password = user.getPassword();
-			service.authenticate(username, password);
+			return service.authenticate(username, password);
+			
+			
 
-			if (user.isAuthenticated()) {
+			// if (user.isAuthenticated()) {
 
-				return "view1";
-			}
+			// 	return "view1";
+			// }
 
-			else {
+			// else {
 
-				return "view0";
-			}
+			// 	return "view0";
+			// }
+			
 
 		}
 

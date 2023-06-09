@@ -13,8 +13,17 @@ public class User implements Serializable {
     private String username;
     @Size(min = 2, message = "Please enter a valid password.")
     private String password;
+    private int loginAttempt;
 
-    private boolean authenticated;
+    public int getLoginAttempt() {
+        return loginAttempt;
+    }
+
+    public void setLoginAttempt(int loginAttempt) {
+        this.loginAttempt = loginAttempt;
+    }
+
+    private boolean authenticated = true;
 
     public boolean isAuthenticated() {
         return authenticated;
